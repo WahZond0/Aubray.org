@@ -1,0 +1,16 @@
+#!/bin/bash
+
+echo "Cleaning old dist folder..."
+rm -rf dist
+mkdir -p dist/main dist/admin dist/dashboard
+
+echo "Building MAIN..."
+cd main && npm install && npm run build && cp -r build/* ../dist/main && cd ..
+
+echo "Building ADMIN..."
+cd admin && npm install && npm run build && cp -r build/* ../dist/admin && cd ..
+
+echo "Building DASHBOARD..."
+cd dashboard && npm install && npm run build && cp -r build/* ../dist/dashboard && cd ..
+
+echo "✅ All builds complete. Ready for Firebase deploy."
