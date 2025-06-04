@@ -1,0 +1,244 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AUBRAY - Social Media for Real Estate, Land Development and Home-Based Business</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-functions.js"></script>
+    <script src="https://unpkg.com/i18next@21.6.14/dist/umd/i18next.min.js"></script>
+    <style>
+        #video-background {
+            position: fixed;
+            right: 0;
+            bottom: 0;
+            min-width: 100%;
+            min-height: 100%;
+            z-index: -1;
+            object-fit: cover;
+        }
+
+        #landing-content {
+            position: relative;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 font-sans">
+    <video autoplay muted loop id="video-background">
+        <source src="https://cdn.coverr.co/videos/coverr-building-a-city-8742/1080p.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <header class="bg-white bg-opacity-80 backdrop-blur shadow p-4 flex justify-between items-center">
+        <h1 class="text-xl font-bold text-gray-800">AUBRAY</h1>
+        <select class="border p-1 rounded" onchange="i18next.changeLanguage(this.value)" aria-label="Language Switcher">
+            <option value="en">English</option>
+            <option value="zu">isiZulu</option>
+            <option value="fr">Français</option>
+            <option value="xh">isiXhosa</option>
+            <option value="pt">Português</option>
+        </select>
+    </header>
+
+    <section id="landing-content" class="text-center py-32 px-4 text-white">
+        <h2 class="text-4xl font-bold mb-6" id="tagline">Welcome to AUBRAY</h2>
+        <p class="mb-4 text-lg">A next-gen platform for real estate, land development, and home businesses across Africa.</p>
+        <p class="mb-6 text-base">Create your profile. Connect with communities. Expand your vision.</p>
+        <p class="mb-6 text-base font-medium">AUBRAY is where real estate meets innovation. Whether you're a developer, agent, entrepreneur, or homeowner, AUBRAY empowers you to showcase spaces, connect with communities, and grow your brand — all on one seamless platform. Built for Africa, ready for the world.</p>
+        <a href="/login" class="inline-block bg-blue-600 text-white px-6 py-3 rounded hover:bg-blue-700 transition">Sign In / Register</a>
+    </section>
+
+    <main class="p-4 max-w-4xl mx-auto">
+        <section id="community" class="protected hidden">
+            <h2 class="text-lg font-semibold mb-2" data-i18n="community_posts">Community Posts</h2>
+            <textarea id="post-content" rows="3" class="w-full p-2 border rounded mb-2" placeholder="Share your thoughts..." data-i18n="share_placeholder"></textarea>
+            <button class="bg-blue-600 text-white px-4 py-2 rounded" onclick="submitPost()" data-i18n="post">Post</button>
+            <div id="community-feed" class="mt-4"></div>
+        </section>
+
+        <section id="upload" class="protected mt-10 hidden">
+            <h2 class="text-lg font-semibold mb-2">Upload Media</h2>
+            <input type="file" id="media-upload" class="mb-2">
+            <button class="bg-indigo-600 text-white px-4 py-2 rounded" onclick="uploadMedia()">Upload</button>
+        </section>
+
+        <section id="checkout" class="protected mt-10 hidden">
+            <h2 class="text-lg font-semibold mb-2" data-i18n="premium">Premium Membership</h2>
+            <p class="mb-2">Subscribe to unlock premium content and features!</p>
+            <form action="https://www.paypal.com/ncp/payment/7N3VEPWJXVKPU" method="get" target="_blank">
+                <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded" onclick="markAsPremium()" data-i18n="subscribe">Subscribe via PayPal</button>
+            </form>
+        </section>
+
+        <section id="seo-dashboard" class="protected mt-10 hidden">
+            <h2 class="text-lg font-semibold mb-2">SEO Dashboard</h2>
+            <p class="mb-2">Real-time SEO status will appear here based on your content engagement and activity.</p>
+            <ul class="list-disc list-inside text-gray-700">
+                <li>🔍 Profile Completeness</li>
+                <li>📊 Content Engagement Rate</li>
+                <li>💬 User Interactions (Comments & Likes)</li>
+                <li>🧠 AI Suggestions for Optimization</li>
+            </ul>
+        </section>
+    </main>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyBGH3NT5yvmF4MAKnv7rLJzkWBhzylnk_4",
+            authDomain: "aubray-c2a05.firebaseapp.com",
+            projectId: "aubray-c2a05",
+            storageBucket: "aubray-c2a05.appspot.com",
+            messagingSenderId: "364574786759",
+            appId: "1:364574786759:web:1af78b2520e162c5fceae2",
+            measurementId: "G-QQFWWM3B42"
+        };
+
+        const app = firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const functions = firebase.functions();
+
+        function setUserRole(uid, role) {
+            const assignRole = functions.httpsCallable('assignUserRole');
+            assignRole({ uid, role })
+                .then(() => alert(`Role assigned: ${role}`))
+                .catch(console.error);
+        }
+
+        function markAsPremium() {
+            const markPremium = functions.httpsCallable('markUserPremium');
+            markPremium()
+                .then(() => alert("You are now a premium member!"))
+                .catch(console.error);
+        }
+
+        function approvePostById(postId) {
+            const approve = functions.httpsCallable('approvePost');
+            approve({ postId })
+                .then(() => alert("Post approved"))
+                .catch(console.error);
+        }
+
+        function submitPost() {
+            const content = document.getElementById("post-content").value;
+            const submit = functions.httpsCallable('submitPost');
+            submit({ content })
+                .then(() => {
+                    alert("Post submitted for review.");
+                    document.getElementById("post-content").value = '';
+                })
+                .catch(console.error);
+        }
+
+        function updateUserSEOScore() {
+            const updateSEO = functions.httpsCallable('updateSEOScore');
+            updateSEO().catch(console.error);
+        }
+
+        function loadSEOTips() {
+            const tips = functions.httpsCallable('getSEOTips');
+            tips().then(result => {
+                const tipsEl = document.createElement('div');
+                tipsEl.innerText = result.data.tips;
+                document.getElementById('seo-dashboard').appendChild(tipsEl);
+            }).catch(console.error);
+        }
+
+        function loadCommunityFeed() {
+            const getPosts = functions.httpsCallable('getApprovedPosts');
+            getPosts().then(result => {
+                const posts = result.data.posts;
+                const feed = document.getElementById("community-feed");
+                feed.innerHTML = '';
+                posts.forEach(post => {
+                    const p = document.createElement('p');
+                    p.textContent = post.content;
+                    feed.appendChild(p);
+                });
+            }).catch(console.error);
+        }
+
+        function checkUserRole() {
+            const getRole = functions.httpsCallable('getUserRole');
+            getRole().then(result => {
+                const role = result.data.role;
+                console.log("User role:", role);
+                // Use role to toggle admin features
+            }).catch(console.error);
+        }
+
+        const taglines = [
+            "Empowering Real Estate, Land, and Local Business—All in One Platform.",
+            "Where Property Meets People—Create, Connect, and Grow.",
+            "AUBRAY: The Social Marketplace for Real Estate and Home-Based Ventures.",
+            "Showcase Your Space. Share Your Vision. Succeed Together.",
+            "Build Your Brand. Promote Your Property. Thrive in Your Community."
+        ];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const taglineEl = document.getElementById('tagline');
+            if (taglineEl) taglineEl.innerText = taglines[Math.floor(Math.random() * taglines.length)];
+        });
+
+        i18next.init({
+            lng: 'en',
+            resources: {
+                en: { translation: { community_posts: "Community Posts", share_placeholder: "Share your thoughts...", post: "Post", premium: "Premium Membership", subscribe: "Subscribe via PayPal" } },
+                zu: { translation: { community_posts: "Okuthunyelwe Komphakathi", share_placeholder: "Yabelana ngemibono yakho...", post: "Thumela", premium: "Ubulungu obukhokhelwayo", subscribe: "Bhalisela u-PayPal" } },
+                fr: { translation: { community_posts: "Publications de la communauté", share_placeholder: "Partagez vos pensées...", post: "Publier", premium: "Adhésion Premium", subscribe: "S'abonner via PayPal" } },
+                xh: { translation: { community_posts: "Izithuba zoluntu", share_placeholder: "Yabelana ngezimvo zakho...", post: "Thumela", premium: "Ububanzi beNkulumbuso", subscribe: "Bhalisela nge-PayPal" } },
+                pt: { translation: { community_posts: "Postagens da Comunidade", share_placeholder: "Compartilhe seus pensamentos...", post: "Publicar", premium: "Assinatura Premium", subscribe: "Assinar via PayPal" } }
+            }
+        }, () => {
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                el.innerText = i18next.t(el.getAttribute('data-i18n'));
+            });
+        });
+
+        i18next.on('languageChanged', () => {
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                el.innerText = i18next.t(el.getAttribute('data-i18n'));
+            });
+        });
+
+        auth.onAuthStateChanged(user => {
+            const protectedSections = document.querySelectorAll('.protected');
+            protectedSections.forEach(section => {
+                section.classList.toggle('hidden', !user);
+            });
+            document.getElementById('landing-content').style.display = user ? 'none' : 'block';
+
+            if (user) {
+                checkUserRole();
+                loadSEOTips();
+                loadCommunityFeed();
+            }
+        });
+
+
+
+
+    </script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
