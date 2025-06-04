@@ -1,0 +1,19 @@
+{
+  "name": "aubray.org",
+  "version": "1.0.0",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "authors": "Wandile Zondo & Smangaliso Radebe",
+  "license": "ISC",
+  "description": "AUBRAY is a next-generation social media platform built for real estate professionals, land developers, and home-based entrepreneurs across Africa. The platform allows users to create profiles, share posts, showcase properties, and access premium tools like SEO dashboards and media uploads. With multilingual support and seamless PayPal integration, AUBRAY empowers communities to connect, grow, and thrive in the digital real estate economy.,",
+  : null,
+  "devDependencies": {
+    "eslint": "^9.28.0"
+  }
+}
+
+
+

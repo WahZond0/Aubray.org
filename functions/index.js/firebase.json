@@ -1,0 +1,62 @@
+{
+  "hosting": [
+    {
+      "target": "main",
+      "public": "dist/main",
+      "ignore": [ "firebase.json", "**/.*", "**/node_modules/**" ],
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ]
+    },
+    {
+      "target": "admin",
+      "public": "dist/admin",
+      "ignore": [ "firebase.json", "**/.*", "**/node_modules/**" ],
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ]
+    },
+    {
+      "target": "dashboard",
+      "public": "dist/dashboard",
+      "ignore": [ "firebase.json", "**/.*", "**/node_modules/**" ],
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ]
+    }
+  ]
+}
+//firebase target:apply hosting main your-firebase-site-name-main
+//firebase target:apply hosting admin your-firebase-site-name-admin
+//firebase target:apply hosting dashboard your-firebase-site-name-dashboard
+//firebase deploy --only hosting:main,hosting:admin,hosting:dashboard --project aubray-website-app --message "Deploying main, admin, and dashboard hosting targets" 
+//firebase deploy --only hosting:main --project aubray-website-app --message "Deploying main hosting target"
+//firebase deploy --only hosting:admin --project aubray-website-app --message "Deploying admin hosting target"
+//firebase deploy --only hosting:dashboard --project aubray-website-app --message "Deploying dashboard hosting target"
+//firebase deploy --only hosting --project aubray-website-app --message "Deploying all hosting targets"
+//firebase deploy --only hosting --project aubray-website-app --message "Deploying all hosting targets with message"
+//firebase deploy --only hosting --project aubray-website-app --message "Deploying all hosting targets with message and no cache" --no-cache
+//firebase deploy --only hosting --project aubray-website-app --message "Deploying all hosting targets with message and no cache" --no-cache --force 
+//firebase deploy --only hosting --project aubray-website-app --message "Deploying all hosting targets with message and no cache" --no-cache --force --debug
+//firebase deploy --only hosting --project aubray-website-app --message "Deploying all hosting targets with message and no cache" --no-cache --force --debug --token YOUR_FIREBASE_TOKEN
+//firebase deploy --only hosting --project aubray-website-app --message "Deploying all hosting targets with message and no cache" --no-cache --force --debug --token YOUR_FIREBASE_TOKEN --non-interactive
+//firebase deploy --only hosting --project aubray-website-app --message "Deploying all hosting targets with message and no cache" --no-cache --force --debug --token YOUR_FIREBASE_TOKEN --non-interactive --force
+//firebase deploy --only hosting --project aubray-website-app --message "Deploying all hosting targets with message and no cache" --no-cache --force --debug --token YOUR_FIREBASE_TOKEN --non-interactive --force --debug
+//firebase deploy --only hosting --project aubray-website-app --message "Deploying all hosting targets with message and no cache" --no-cache --force --debug --token YOUR_FIREBASE_TOKEN --non-interactive --force --debug --only hosting:main,hosting:admin,hosting:dashboard
+//firebase deploy --only hosting --project aubray-website-app --message "Deploying all hosting targets with message and no cache" --no-cache --force --debug --token YOUR_FIREBASE_TOKEN --non-interactive --force --debug --only hosting:main,hosting:admin,hosting:dashboard --force
+//firebase deploy --only hosting --project aubray-website-app --message "Deploying all hosting targets with message and no cache" --no-cache --force --debug --token YOUR_FIREBASE_TOKEN --non-interactive --force --debug --only hosting:main,hosting:admin,hosting:dashboard --force --debug
+//firebase deploy --only hosting --project aubray-website-app --message "Deploying all hosting targets with message and no cache" --no-cache --force --debug --token YOUR_FIREBASE_TOKEN --non-interactive --force --debug --only hosting:main,hosting:admin,hosting:dashboard --force --debug --token YOUR_FIREBASE_TOKEN
+//firebase deploy --only hosting --project aubray-website-app --message "Deploying all hosting targets with message and no cache" --no-cache --force --debug --token YOUR_FIREBASE_TOKEN --non-interactive --force --debug --only hosting:main,hosting:admin,hosting:dashboard --force --debug --token YOUR_FIREBASE_TOKEN --non-interactive
+//firebase deploy --only hosting --project aubray-website-app --message "Deploying all hosting targets with message and no cache" --no-cache --force --debug --token YOUR_FIREBASE_TOKEN --non-interactive --force --debug --only hosting:main,hosting:admin,hosting:dashboard --force --debug --token YOUR_FIREBASE_TOKEN --non-interactive -- force --debug
+//firebase deploy --only hosting --project aubray-website-app --message "Deploying all hosting targets with message and no cache" --no-cache --force --debug --token YOUR_FIREBASE_TOKEN --non-interactive --force --debug --only hosting:main,hosting:admin,hosting:dashboard --force --debug --token YOUR_FIREBASE_TOKEN --non-interactive --force --debug --only hosting:main,hosting:admin,hosting:dashboard
+//firebase deploy --only hosting --project aubray-website-app --message "Deploying all hosting targets with message and no cache" --no-cache --force --debug --token YOUR_FIREBASE_TOKEN --non-interactive --force --debug --only hosting:main,hosting:admin,hosting:dashboard --force --debug --token YOUR_FIREBASE_TOKEN --non-interactive --force --debug --only hosting:main,hosting:admin,hosting:dashboard --force --debug
+//<firebase deploy>

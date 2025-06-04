@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AUBRAY - Social Media for Real Estate, Land Development and Home-Based Business</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-functions.js"></script>
+    <script src="https://unpkg.com/i18next@21.6.14/dist/umd/i18next.min.js"></script>
+    <style>
+        #video-background {
+            position: fixed;
+            right: 0;
+            bottom: 0;
+            min-width: 100%;
+            min-height: 100%;
+            z-index: -1;
+            object-fit: cover;
+        }
+
+        #landing-content {
+            position: relative;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 font-sans">
+    <video autoplay muted loop id="video-background">
+        <source src="https://cdn.coverr.co/videos/coverr-building-a-city-8742/1080p.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <header class="bg-white bg-opacity-80 backdrop-blur shadow p-4 flex justify-between items-center">
+        <h1 class="text-xl font-bold text-gray-800">AUBRAY</h1>
+        <select class="border p-1 rounded" onchange="i18next.changeLanguage(this.value)" aria-label="Language Switcher">
+            <option value="en">English</option>
+            <option value="zu">isiZulu</option>
+            <option value="fr">Français</option>
+            <option value="xh">isiXhosa</option>
+            <option value="pt">Português</option>
+        </select>
+    </header>
+
+    <section id="landing-content" class="text-center py-32 px-4 text-white">
+        <h2 class="text-4xl font-bold mb-6" id="tagline">Welcome to AUBRAY</h2>
+        <p class="mb-4 text-lg">A next-gen platform for real estate, land development, and home businesses across Africa.</p>
+        <p class="mb-6 text-base">Create your profile. Connect with communities. Expand your vision.</p>
+        <p class="mb-6 text-base font-medium">AUBRAY is where real estate meets innovation. Whether you're a developer, agent, entrepreneur, or homeowner, AUBRAY empowers you to showcase spaces, connect with communities, and grow your brand — all on one seamless platform. Built for Africa, ready for the world.</p>
+        <a href="/login" class="inline-block bg-blue-600 text-white px-6 py-3 rounded hover:bg-blue-700 transition">Sign In / Register</a>
+    </section>
+</body>
+</html>
+// Firebase configuration (firebase-config.js)
+import { initializeApp } from 'firebase/app';
+import { getAnalytics } from 'firebase/analytics';
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  query,
+  where,
+  orderBy,
+  limit,
+  getDocs,
+  serverTimestamp,
+  deleteDoc,
+  doc
+} from 'firebase/firestore';
+import {
+  getAuth,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  signOut,
+  updateProfile
+} from 'firebase/auth';
+
+const firebaseConfig = {
+  apiKey: 'AIzaSyBGH3NT5yvmF4MAKnv7rLJzkWBhzylnk_4',
+  authDomain: 'aubray-c2a05.firebaseapp.com',
+  projectId: 'aubray-c2a05',
+  storageBucket: 'aubray-c2a05.appspot.com',
+  messagingSenderId: '364574786759',
+  appId: '1:364574786759:web:1af78b2520e162c5fceae2',
+  measurementId: 'G-QQFWWM3B42'
+};
+
+const app = initializeApp(firebaseConfig);
+
+let analytics;
+if (typeof window !== 'undefined') {
+  analytics = getAnalytics(app);
+  const loginVideo = document.createElement('video');
+  loginVideo.setAttribute('autoplay', '');
+  loginVideo.setAttribute('muted', '');
+  loginVideo.setAttribute('loop', '');
+  loginVideo.setAttribute('id', 'login-background-video');
+  loginVideo.style.position = 'fixed';
+  loginVideo.style.right = '0';
+  loginVideo.style.bottom = '0';
+  loginVideo.style.minWidth = '100%';
+  loginVideo.style.minHeight = '100%';
+  loginVideo.style.zIndex = '-1';
+  loginVideo.style.objectFit = 'cover';
+
+  const source = document.createElement('source');
+  source.setAttribute('src', 'https://cdn.coverr.co/videos/coverr-building-a-city-8742/1080p.mp4'); // Most viewed video from Coverr
+  source.setAttribute('type', 'video/mp4');
+  loginVideo.appendChild(source);
+  document.body.prepend(loginVideo);
+}
+
+const db = getFirestore(app);
+const auth = getAuth(app);
+
+export {
+  app,
+  analytics,
+  db,
+  auth,
+  collection,
+  addDoc,
+  query,
+  where,
+  orderBy,
+  limit,
+  getDocs,
+  serverTimestamp,
+  deleteDoc,
+  doc,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  signOut,
+  updateProfile
+};
+
