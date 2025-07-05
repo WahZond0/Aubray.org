@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "aubray-website-app"
+  },
+  "targets": {
+    "aubray-website-app": {
+      "hosting": {
+        "main": ["aubray-main"],
+        "admin": ["aubray-admin"],
+        "dashboard": ["aubray-dashboard"]
+      }
+    }
+  }
+}
